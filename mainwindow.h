@@ -6,13 +6,13 @@
 #include <QVBoxLayout>
 #include <QStringList>
 #include <QStringListModel>
-#include <QLineEdit>
 #include <QMainWindow>
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QDropEvent>
 #include "customlistview.h"
 #include "logUtils.h"
+#include "searchbar.h"
 
 class MainWindow : public QMainWindow
 {
@@ -29,15 +29,16 @@ private:
     const int WINDOW_HEIGHT = 600;
     const int MAX_NUM_OF_FILES = 1;
 
-    LogUtils * fileUtils;
+    LogUtils * logUtils;
 
     void setUpUI();
+    void connectObjects();
 
 
     //widgets
     QVBoxLayout * mainVerticalLayout;
     QWidget * window;
-    QLineEdit * searchBar;
+    SearchBar * searchBar;
 
     //listView
     CustomListView * listView;

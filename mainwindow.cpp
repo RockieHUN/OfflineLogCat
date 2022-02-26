@@ -4,8 +4,9 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow{parent}
 {
     setUpUI();
-    fileUtils = new LogUtils();
+    logUtils = new LogUtils();
     setAcceptDrops(true);
+    connectObjects();
 }
 
 void MainWindow::setUpUI(){
@@ -17,7 +18,7 @@ void MainWindow::setUpUI(){
 
     //widgets
     listView = new CustomListView();
-    searchBar = new QLineEdit();
+    searchBar = new SearchBar();
 
     //add views to layouts
     mainVerticalLayout->addWidget(searchBar);
@@ -28,9 +29,15 @@ void MainWindow::setUpUI(){
     window->setLayout(mainVerticalLayout);
 }
 
+void MainWindow::connectObjects(){
+    connect(searchBar, &QLineEdit::textChanged, logUtils, &LogUtils::filterLogs);
+    connect(logUtils, &LogUtils::onLogsFiltered, listView, &CustomListView::updateLogList);
+}
+
 void MainWindow::dragEnterEvent(QDragEnterEvent *event){
     if (event->mimeData()->hasUrls()){
-        if (event->mimeData()->urls().size() > MAX_NUM_OF_FILES || !event->mimeData()->urls()[0].fileName().endsWith(".txt")){
+        //TODO: check file type
+        if (event->mimeData()->urls().size() > MAX_NUM_OF_FILES || !event->mimeData()->urls()[0].fileName().endsWith(".log")){
             return;
         }
         else{
@@ -45,8 +52,8 @@ void MainWindow::dropEvent(QDropEvent *event)
     foreach (const QUrl &url, event->mimeData()->urls()) {
         QString filePath = url.toLocalFile();
         qDebug() << "Dropped file:" << filePath;
-        fileUtils->readFile(filePath);
-        listView->updateList(fileUtils->getLogs());
+        logUtils->readFile(filePath);
+        listView->updateList(logUtils->getLogs());
     }
 }
 
@@ -55,5 +62,5 @@ MainWindow::~MainWindow(){
     delete mainVerticalLayout;
     delete listView;
     delete searchBar;
-    delete fileUtils;
+    delete logUtils;
 }

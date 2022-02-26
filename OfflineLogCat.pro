@@ -12,12 +12,14 @@ SOURCES += \
     customlistview.cpp \
     logUtils.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    searchbar.cpp
 
 HEADERS += \
     customlistview.h \
     logUtils.h \
-    mainwindow.h
+    mainwindow.h \
+    searchbar.h
 
 FORMS +=
 

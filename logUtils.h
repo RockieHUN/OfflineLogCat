@@ -7,8 +7,9 @@
 #include <QList>
 #include <QDebug>
 
-class LogUtils
+class LogUtils : public QObject
 {
+    Q_OBJECT
 public:
     LogUtils();
     ~LogUtils();
@@ -18,6 +19,12 @@ public:
 
 private:
     QList<QString> *logList;
+
+public slots:
+    void filterLogs(const QString &newText);
+
+signals:
+    void onLogsFiltered(QList<QString> newList);
 
 };
 

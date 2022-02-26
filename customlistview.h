@@ -10,6 +10,9 @@ class CustomListView : public QListWidget
 public:
     CustomListView();
     void updateList(QStringList* list);
+
+public slots:
+    void updateLogList(QList<QString> filteredLogs);
 };
 
 #endif // CUSTOMLISTVIEW_H

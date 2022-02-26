@@ -12,6 +12,7 @@
 #include <QMimeData>
 #include <QDropEvent>
 #include "customlistview.h"
+#include "logUtils.h"
 
 class MainWindow : public QMainWindow
 {
@@ -22,20 +23,25 @@ public:
 public:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+    ~MainWindow();
 private:
     const int WINDOW_WIDTH = 1000;
     const int WINDOW_HEIGHT = 600;
     const int MAX_NUM_OF_FILES = 1;
 
+    LogUtils * fileUtils;
+
+    void setUpUI();
+
+
+    //widgets
     QVBoxLayout * mainVerticalLayout;
     QWidget * window;
-    //searchInput
     QLineEdit * searchBar;
 
     //listView
     CustomListView * listView;
-    QStringListModel * stringListModel;
-    QStringList * stringList;
+
 
 signals:
 

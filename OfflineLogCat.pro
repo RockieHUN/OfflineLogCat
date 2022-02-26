@@ -10,11 +10,13 @@ CONFIG += c++11
 
 SOURCES += \
     customlistview.cpp \
+    logUtils.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     customlistview.h \
+    logUtils.h \
     mainwindow.h
 
 FORMS +=

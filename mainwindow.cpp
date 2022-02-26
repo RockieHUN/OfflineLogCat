@@ -3,15 +3,12 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow{parent}
 {
-    stringList = new QStringList();
+    setUpUI();
+    fileUtils = new LogUtils();
+    setAcceptDrops(true);
+}
 
-    stringList->append("ASD");
-    stringList->append("BSDSADDSADASDASDASDASASDAA");
-
-    //models
-    stringListModel = new QStringListModel();
-    stringListModel->setStringList(*stringList);
-
+void MainWindow::setUpUI(){
     //window
     window = new QWidget();
 
@@ -20,9 +17,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     //widgets
     listView = new CustomListView();
-    listView->setModel(stringListModel);
-    listView->setAcceptDrops(true);
-
     searchBar = new QLineEdit();
 
     //add views to layouts
@@ -32,22 +26,34 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(window);
     this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     window->setLayout(mainVerticalLayout);
-    setAcceptDrops(true);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event){
     if (event->mimeData()->hasUrls()){
-        if (event->mimeData()->urls().size() > MAX_NUM_OF_FILES){
+        if (event->mimeData()->urls().size() > MAX_NUM_OF_FILES || !event->mimeData()->urls()[0].fileName().endsWith(".txt")){
             return;
         }
-        event->acceptProposedAction();
+        else{
+            event->acceptProposedAction();
+        }
     }
 }
 
 void MainWindow::dropEvent(QDropEvent *event)
 {
+    event->mimeData()->urls()[0].toLocalFile();
     foreach (const QUrl &url, event->mimeData()->urls()) {
-        QString fileName = url.toLocalFile();
-        qDebug() << "Dropped file:" << fileName;
+        QString filePath = url.toLocalFile();
+        qDebug() << "Dropped file:" << filePath;
+        fileUtils->readFile(filePath);
+        listView->updateList(fileUtils->getLogs());
     }
+}
+
+MainWindow::~MainWindow(){
+    delete window;
+    delete mainVerticalLayout;
+    delete listView;
+    delete searchBar;
+    delete fileUtils;
 }
